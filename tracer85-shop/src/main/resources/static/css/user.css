@@ -221,5 +221,8 @@ table.table .avatar {
 }	
 .modal form label {
 	font-weight: normal;
-}	
+}
+tr td .row.col-md-4{
+	margin-left: -2px;
+}
 

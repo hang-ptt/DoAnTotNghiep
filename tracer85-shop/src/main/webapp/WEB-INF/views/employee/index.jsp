@@ -56,7 +56,7 @@
                     <div class="col-sm-6">
                         <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i
                                 class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
-
+                        <a href="${pageContext.request.contextPath}/employee/export/excel" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Export to Excel</span></a>
                     </div>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                     <th>Email</th>
                     <th>Address</th>
                     <th>Phone</th>
-                    <th>Actions</th>
+                    <th style="text-align: center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -80,28 +80,47 @@
                         <td>${employee.address}</td>
                         <td>${employee.phone}</td>
                         <td>
-                            <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
-                                                                                             data-toggle="tooltip"
-                                                                                             title="Edit">&#xE254;</i></a>
-                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
-                                                                                                 data-toggle="tooltip"
-                                                                                                 title="Delete">&#xE872;</i></a>
-                            <input type="hidden" value="${employee.id}" id="id">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <a href="#" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                                    <input type="hidden" value="${employee.id}" id="id">
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
+                                                                                                     data-toggle="tooltip"
+                                                                                                     title="Edit">&#xE254;</i></a>
+                                    <input type="hidden" value="${employee.id}" id="id">
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons"
+                                                                                                         data-toggle="tooltip"
+                                                                                                         title="Delete">&#xE872;</i></a>
+                                    <input type="hidden" value="${employee.id}" id="id">
+                                </div>
+
+                            </div>
+
                         </td>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
-            <div class="clearfix">
-                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+            <div class="clearfix" c:if="${totalPages > 1}">
+                <div class="hint-text">Showing <b>5</b> out of <b>${totalItems}</b> entries</div>
+                <ul class="pagination" >
+
+                    <c:if test="${currentPage > 1}">
+                        <li class="page-item"><a href="${pageContext.request.contextPath}/page/${currentPage-1}">Previous</a></li>
+                    </c:if>
+
+                    <c:forEach var="page" begin="1" end="${totalPages}" varStatus="i">
+                        <li class="page-item active"><a href="${pageContext.request.contextPath}/page/${i.index}" class="page-link">${i.index}</a></li>
+                    </c:forEach>
+
+                    <c:if test="${currentPage < totalPages}">
+                        <li class="page-item"><a href="${pageContext.request.contextPath}/page/${currentPage+1}">Next</a></li>
+                    </c:if>
+
                 </ul>
             </div>
         </div>
