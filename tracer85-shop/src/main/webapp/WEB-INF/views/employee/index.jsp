@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; ISO-8859-1"
-         pageEncoding="ISO-8859-1" isELIgnored="false" %>
+         pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Manage Employees</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -63,10 +64,10 @@
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th>No.</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Address</th>
+                    <th>No. </th>
+                    <th>Name <a href="${pageContext.request.contextPath}/page/${currentPage}?sortField=name&sortDir=${reverseSortDir}"><i class="fa fa-sort"></i></a></th>
+                    <th>Email <a href="${pageContext.request.contextPath}/page/${currentPage}?sortField=email&sortDir=${reverseSortDir}"><i class="fa fa-sort"></i></a></th>
+                    <th>Address <a href="${pageContext.request.contextPath}/page/${currentPage}?sortField=address&sortDir=${reverseSortDir}"><i class="fa fa-sort"></i></a></i></th>
                     <th>Phone</th>
                     <th style="text-align: center">Actions</th>
                 </tr>
@@ -110,15 +111,15 @@
                 <ul class="pagination" >
 
                     <c:if test="${currentPage > 1}">
-                        <li class="page-item"><a href="${pageContext.request.contextPath}/page/${currentPage-1}">Previous</a></li>
+                        <li class="page-item"><a href="${pageContext.request.contextPath}/page/${currentPage-1}?sortField=${sortField}&sortDir=${sortDir}">Previous</a></li>
                     </c:if>
 
                     <c:forEach var="page" begin="1" end="${totalPages}" varStatus="i">
-                        <li class="page-item active"><a href="${pageContext.request.contextPath}/page/${i.index}" class="page-link">${i.index}</a></li>
+                        <li class="page-item active"><a href="${pageContext.request.contextPath}/page/${i.index}?sortField=${sortField}&sortDir=${sortDir}" class="page-link">${i.index}</a></li>
                     </c:forEach>
 
                     <c:if test="${currentPage < totalPages}">
-                        <li class="page-item"><a href="${pageContext.request.contextPath}/page/${currentPage+1}">Next</a></li>
+                        <li class="page-item"><a href="${pageContext.request.contextPath}/page/${currentPage+1}?sortField=${sortField}&sortDir=${sortDir}">Next</a></li>
                     </c:if>
 
                 </ul>

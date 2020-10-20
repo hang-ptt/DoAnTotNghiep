@@ -7,11 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +27,8 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.GET)
     public String index(Model model){
         //modelMap.put("employees",employeeService.findAll());
-        return findPaginated(1,model);
+        //return findPaginated(1,model);
+        return findPaginated(1, "id", "asc", model);
     }
 
     @RequestMapping(value = "create",method = RequestMethod.POST)
@@ -64,19 +61,19 @@ public class EmployeeController {
         return "redirect:/employee";
     }
 
-    @GetMapping("/page/{pageNo}")
-    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model) {
-        int pageSize = 5;
-
-        Page< Employee > page = employeeService.findPaged(pageNo, pageSize);
-        List< Employee > employees = page.getContent();
-        model.addAttribute("number", page.getNumber());
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("employees", employees);
-        return "employee/index";
-    }
+//    @GetMapping("/page/{pageNo}")
+//    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model) {
+//        int pageSize = 5;
+//
+//        Page< Employee > page = employeeService.findPaged(pageNo, pageSize);
+//        List< Employee > employees = page.getContent();
+//        model.addAttribute("number", page.getNumber());
+//        model.addAttribute("currentPage", pageNo);
+//        model.addAttribute("totalPages", page.getTotalPages());
+//        model.addAttribute("totalItems", page.getTotalElements());
+//        model.addAttribute("employees", employees);
+//        return "employee/index";
+//    }
 
     @GetMapping("/employee/export/excel")
     public void exportToExcel(HttpServletResponse response) throws IOException {
@@ -95,4 +92,25 @@ public class EmployeeController {
         excelExporter.export(response);
     }
 
+    @GetMapping("/page/{pageNo}")
+    public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
+                                @RequestParam("sortField") String sortField,
+                                @RequestParam("sortDir") String sortDir,
+                                Model model) {
+        int pageSize = 5;
+
+        Page < Employee > page = employeeService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        List < Employee > employees = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        model.addAttribute("employees", employees);
+        return "employee/index";
+    }
 }

@@ -17,4 +17,6 @@ public interface EmployeeService {
     public List<Employee> listAll();
 
     Page<Employee> findPaged(int pageNo, int pageSize);
+
+    Page <Employee > findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
 }
